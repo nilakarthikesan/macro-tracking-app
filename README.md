@@ -1,4 +1,4 @@
-# Macro Tracking App - Backend
+# Macro Tracking App 
 
 A FastAPI-based backend for a macro tracking application.
 
