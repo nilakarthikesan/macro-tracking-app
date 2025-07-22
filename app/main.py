@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, status
 from app.models import UserSignupRequest, UserLoginRequest, UserResponse, TokenResponse
+from app.database import test_supabase_connection, get_supabase
 
 # Create FastAPI app
 app = FastAPI(
@@ -25,6 +26,53 @@ async def health_check():
         "status": "healthy", 
         "message": "Server is running"
     }
+
+# Database connection test endpoint
+@app.get("/test-db")
+async def test_database():
+    """Test the Supabase database connection"""
+    try:
+        success = test_supabase_connection()
+        if success:
+            return {
+                "status": "success",
+                "message": "Database connection successful!",
+                "database": "Supabase"
+            }
+        else:
+            return {
+                "status": "error",
+                "message": "Database connection failed!",
+                "database": "Supabase"
+            }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Database test failed: {str(e)}",
+            "database": "Supabase"
+        }
+
+# Test user_profiles table endpoint
+@app.get("/test-table")
+async def test_user_profiles_table():
+    """Test reading from the user_profiles table"""
+    try:
+        supabase = get_supabase()
+        
+        # Try to read from the user_profiles table
+        response = supabase.table('user_profiles').select('*').limit(1).execute()
+        
+        return {
+            "status": "success",
+            "message": "Successfully connected to user_profiles table!",
+            "data": response.data,
+            "count": len(response.data)
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Failed to read from user_profiles table: {str(e)}"
+        }
 
 # Authentication endpoints
 # check if user is signing up correctly returns error if not
