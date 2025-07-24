@@ -22,6 +22,17 @@ class TokenResponse(BaseModel):
     user_id: str
     email: str
 
+# User Profile Models
+class UserProfileCreate(BaseModel):
+    user_id: str
+    display_name: Optional[str] = None
+
+class UserProfileResponse(BaseModel):
+    user_id: str
+    display_name: Optional[str]
+    created_at: str
+    updated_at: str
+
 # Future Models (for later phases)
 # These will be used when we add macro tracking and food logging
 
