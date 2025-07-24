@@ -24,7 +24,6 @@ class TokenResponse(BaseModel):
 
 # User Profile Models
 class UserProfileCreate(BaseModel):
-    user_id: str
     display_name: Optional[str] = None
 
 class UserProfileResponse(BaseModel):

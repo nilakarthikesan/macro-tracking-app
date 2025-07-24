@@ -7,18 +7,6 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ## 🔍 Read/Test Endpoints (GET)
 
-### `GET /`
-**Purpose**: Basic health check to verify FastAPI is running
-**Response**: Simple JSON with status message
-**Database**: None
-**Example Response**:
-```json
-{
-  "message": "Hello! FastAPI is working!",
-  "status": "success"
-}
-```
-
 ### `GET /health`
 **Purpose**: Check if the server is healthy and running
 **Response**: Server status information
@@ -31,43 +19,38 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 }
 ```
 
-### `GET /test-db`
-**Purpose**: Test the connection to Supabase database
-**Response**: Database connection status
-**Database**: Tests connection (no data read/written)
-**Example Response**:
-```json
-{
-  "status": "success",
-  "message": " Database connection successful!",
-  "database": "Supabase"
-}
-```
-
 ### `GET /test-table`
 **Purpose**: Test reading from the user_profiles table
-**Response**: Data from user_profiles table (currently empty)
+**Response**: Data from user_profiles table
 **Database**: **READS** from `user_profiles` table
 **Example Response**:
 ```json
 {
   "status": "success",
-  "message": " Successfully connected to user_profiles table!",
-  "data": [],
-  "count": 0
+  "message": "Successfully connected to user_profiles table!",
+  "data": [
+    {
+      "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+      "display_name": "Test User Profile",
+      "created_at": "2025-07-24T04:05:56.8207",
+      "updated_at": "2025-07-24T04:05:56.8207"
+    }
+  ],
+  "count": 1
 }
 ```
 
-### `GET /me`
-**Purpose**: Get current user information (DUMMY - for testing)
-**Response**: Dummy user data
-**Database**: None (dummy data)
+### `GET /auth/me`
+**Purpose**: Get current user information from JWT token
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Response**: Current user data from Supabase Auth
+**Database**: **READS** from Supabase Auth (auth.users)
 **Example Response**:
 ```json
 {
-  "id": "user_123",
-  "email": "user@example.com",
-  "message": "This is dummy user data for Phase 1"
+  "id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "email": "test@macroapp.com",
+  "message": "Real user data from Supabase Auth"
 }
 ```
 
@@ -75,8 +58,58 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ## ✏️ Create Endpoints (POST)
 
-### `POST /user-profiles`
+### `POST /auth/signup`
+**Purpose**: Create a new user account using Supabase Auth
+**Request Body**: UserSignupRequest model
+**Response**: TokenResponse with user info
+**Database**: **WRITES** to Supabase Auth (auth.users)
+**Status Code**: 201 (Created)
+
+**Request Example**:
+```json
+{
+  "email": "newuser@example.com",
+  "password": "securepassword123"
+}
+```
+
+**Response Example**:
+```json
+{
+  "access_token": "signup_successful",
+  "token_type": "bearer",
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "email": "newuser@example.com"
+}
+```
+
+### `POST /auth/login`
+**Purpose**: Authenticate user and return access token
+**Request Body**: UserLoginRequest model
+**Response**: TokenResponse with JWT token
+**Database**: **READS** from Supabase Auth (auth.users)
+
+**Request Example**:
+```json
+{
+  "email": "test@macroapp.com",
+  "password": "test123"
+}
+```
+
+**Response Example**:
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsImtpZCI6IjlVMEI2WGZwQitpTmtiU0IiLCJ0eXAiOiJKV1QifQ...",
+  "token_type": "bearer",
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "email": "test@macroapp.com"
+}
+```
+
+### `POST /profiles/`
 **Purpose**: Create a new user profile in the database
+**Headers**: `Authorization: Bearer <jwt_token>`
 **Request Body**: UserProfileCreate model
 **Response**: UserProfileResponse with created data
 **Database**: **WRITES** to `user_profiles` table
@@ -85,67 +118,17 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 **Request Example**:
 ```json
 {
-  "user_id": "test-user-123",
-  "display_name": "Test User"
+  "display_name": "John Doe"
 }
 ```
 
 **Response Example**:
 ```json
 {
-  "user_id": "test-user-123",
-  "display_name": "Test User",
-  "created_at": "2025-01-22T10:30:00Z",
-  "updated_at": "2025-01-22T10:30:00Z"
-}
-```
-
-### `POST /signup`
-**Purpose**: Create a new user account (DUMMY - for testing)
-**Request Body**: UserSignupRequest model
-**Response**: TokenResponse with dummy token
-**Database**: None (dummy implementation)
-**Status Code**: 201 (Created)
-
-**Request Example**:
-```json
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-
-**Response Example**:
-```json
-{
-  "access_token": "dummy_token_12345",
-  "token_type": "bearer",
-  "user_id": "user_123",
-  "email": "user@example.com"
-}
-```
-
-### `POST /login`
-**Purpose**: Authenticate user and return token (DUMMY - for testing)
-**Request Body**: UserLoginRequest model
-**Response**: TokenResponse with dummy token
-**Database**: None (dummy implementation)
-
-**Request Example**:
-```json
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-
-**Response Example**:
-```json
-{
-  "access_token": "dummy_token_12345",
-  "token_type": "bearer",
-  "user_id": "user_123",
-  "email": "user@example.com"
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "display_name": "John Doe",
+  "created_at": "2025-07-24T04:05:56.8207",
+  "updated_at": "2025-07-24T04:05:56.8207"
 }
 ```
 
@@ -153,26 +136,27 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ## 🔄 Database Interaction Summary
 
-| Endpoint | Method | Database Action | Purpose |
-|----------|--------|-----------------|---------|
-| `/` | GET | None | Health check |
-| `/health` | GET | None | Server status |
-| `/test-db` | GET | Test connection | Database connectivity |
-| `/test-table` | GET | **READ** user_profiles | Test table access |
-| `/me` | GET | None | Get user info (dummy) |
-| `/user-profiles` | POST | **WRITE** user_profiles | Create user profile |
-| `/signup` | POST | None | User registration (dummy) |
-| `/login` | POST | None | User authentication (dummy) |
+| Endpoint | Method | Database Action | Authentication | Purpose |
+|----------|--------|-----------------|----------------|---------|
+| `/health` | GET | None | None | Server health check |
+| `/test-table` | GET | **READ** user_profiles | None | Test table access |
+| `/auth/me` | GET | **READ** auth.users | JWT Required | Get current user |
+| `/auth/signup` | POST | **WRITE** auth.users | None | User registration |
+| `/auth/login` | POST | **READ** auth.users | None | User authentication |
+| `/profiles/` | POST | **WRITE** user_profiles | JWT Required | Create user profile |
+
+---
+
+## 🔐 Authentication Flow
+
+1. **User Registration**: `POST /auth/signup` → Creates user in Supabase Auth
+2. **User Login**: `POST /auth/login` → Returns JWT token
+3. **Protected Endpoints**: Include `Authorization: Bearer <jwt_token>` header
+4. **User Profile**: `POST /profiles/` → Creates profile linked to authenticated user
 
 ---
 
 ## 🚧 Future Endpoints (Planned)
-
-### Authentication (Real Implementation)
-- `POST /auth/signup` - Real user registration
-- `POST /auth/login` - Real user authentication
-- `POST /auth/logout` - User logout
-- `GET /auth/me` - Get current user (with JWT)
 
 ### Macro Management
 - `POST /macros` - Set user macro goals

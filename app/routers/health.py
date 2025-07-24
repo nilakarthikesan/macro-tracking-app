@@ -1,15 +1,7 @@
 from fastapi import APIRouter
-from app.database import test_supabase_connection, get_supabase
+from app.database import get_supabase
 
 router = APIRouter(tags=["health & testing"])
-
-@router.get("/")
-async def root():
-    """Root endpoint - just to test if FastAPI is working."""
-    return {
-        "message": "Hello! FastAPI is working!",
-        "status": "success"
-    }
 
 @router.get("/health")
 async def health_check():
@@ -18,30 +10,6 @@ async def health_check():
         "status": "healthy", 
         "message": "Server is running"
     }
-
-@router.get("/test-db")
-async def test_database():
-    """Test the Supabase database connection"""
-    try:
-        success = test_supabase_connection()
-        if success:
-            return {
-                "status": "success",
-                "message": "✅ Database connection successful!",
-                "database": "Supabase"
-            }
-        else:
-            return {
-                "status": "error",
-                "message": "❌ Database connection failed!",
-                "database": "Supabase"
-            }
-    except Exception as e:
-        return {
-            "status": "error",
-            "message": f"❌ Database test failed: {str(e)}",
-            "database": "Supabase"
-        }
 
 @router.get("/test-table")
 async def test_user_profiles_table():
@@ -54,12 +22,12 @@ async def test_user_profiles_table():
         
         return {
             "status": "success",
-            "message": "✅ Successfully connected to user_profiles table!",
+            "message": "Successfully connected to user_profiles table!",
             "data": response.data,
             "count": len(response.data)
         }
     except Exception as e:
         return {
             "status": "error",
-            "message": f"❌ Failed to read from user_profiles table: {str(e)}"
+            "message": f"Failed to read from user_profiles table: {str(e)}"
         } 
