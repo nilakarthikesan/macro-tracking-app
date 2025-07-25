@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
 
 # Authentication Models
 # using models to validate the data that is sent to the API 
@@ -83,6 +83,38 @@ class FoodLogUpdate(BaseModel):
     protein: Optional[float] = None
     carbs: Optional[float] = None
     fat: Optional[float] = None
+
+# Food Summary Models
+class MealSummary(BaseModel):
+    meal_type: str
+    calories: int
+    protein: float
+    carbs: float
+    fat: float
+
+class DailySummaryResponse(BaseModel):
+    date: str
+    total_calories: int
+    total_protein: float
+    total_carbs: float
+    total_fat: float
+    goal_calories: int
+    goal_protein: float
+    goal_carbs: float
+    goal_fat: float
+    calories_remaining: int
+    protein_remaining: float
+    carbs_remaining: float
+    fat_remaining: float
+    meals: List[MealSummary]
+
+class WeeklySummaryResponse(BaseModel):
+    week_start: str
+    week_end: str
+    daily_averages: dict
+    goal_averages: dict
+    days_with_data: int
+    total_days: int
 
 # Agent Consent Models (for later phases)
 class AgentConsent(BaseModel):
