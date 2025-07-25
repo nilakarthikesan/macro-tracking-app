@@ -32,16 +32,30 @@ class UserProfileResponse(BaseModel):
     created_at: str
     updated_at: str
 
-# Future Models (for later phases)
-# These will be used when we add macro tracking and food logging
-
-class MacroGoals(BaseModel):
+# Macro Goals Models
+class MacroGoalsCreate(BaseModel):
     total_calories: int
     protein_pct: float
     carb_pct: float
     fat_pct: float
 
-class FoodLog(BaseModel):
+class MacroGoalsResponse(BaseModel):
+    user_id: str
+    total_calories: int
+    protein_pct: float
+    carb_pct: float
+    fat_pct: float
+    created_at: str
+    updated_at: str
+
+class MacroGoalsUpdate(BaseModel):
+    total_calories: Optional[int] = None
+    protein_pct: Optional[float] = None
+    carb_pct: Optional[float] = None
+    fat_pct: Optional[float] = None
+
+# Food Logging Models (for later phases)
+class FoodLogCreate(BaseModel):
     meal_type: str
     food_name: str
     calories: int
@@ -49,6 +63,28 @@ class FoodLog(BaseModel):
     carbs: float
     fat: float
 
+class FoodLogResponse(BaseModel):
+    id: str
+    user_id: str
+    meal_type: str
+    food_name: str
+    calories: int
+    protein: float
+    carbs: float
+    fat: float
+    logged_at: str
+    created_at: str
+    updated_at: str
+
+class FoodLogUpdate(BaseModel):
+    meal_type: Optional[str] = None
+    food_name: Optional[str] = None
+    calories: Optional[int] = None
+    protein: Optional[float] = None
+    carbs: Optional[float] = None
+    fat: Optional[float] = None
+
+# Agent Consent Models (for later phases)
 class AgentConsent(BaseModel):
     has_consented: bool
     agent_id: str 
