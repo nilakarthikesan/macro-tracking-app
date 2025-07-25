@@ -66,6 +66,8 @@ A FastAPI-based backend for a macro tracking application with Supabase integrati
 - `GET /food-logs/` - Get all food logs for current user (requires JWT)
 - `PUT /food-logs/{log_id}` - Update a food log entry (requires JWT)
 - `DELETE /food-logs/{log_id}` - Delete a food log entry (requires JWT)
+- `GET /food-logs/summary/daily` - Get daily macro summary with goal comparison (requires JWT)
+- `GET /food-logs/summary/weekly` - Get weekly macro summary with averages (requires JWT)
 
 ### Health & Testing
 - `GET /health` - Server health check
@@ -98,7 +100,7 @@ macro-tracking-app/
 
 ## Next Steps
 
-- [ ] Add daily/weekly summary endpoints
 - [ ] Add agent permissions system
 - [ ] Implement frontend React application
-- [ ] Add comprehensive testing suite 
+- [ ] Add comprehensive testing suite
+- [ ] Add Row Level Security (RLS) policies for production 

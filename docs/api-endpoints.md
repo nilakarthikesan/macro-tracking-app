@@ -96,6 +96,68 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 ]
 ```
 
+### `GET /food-logs/summary/daily`
+**Purpose**: Get daily macro summary with goal comparison
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Query Parameters**: `date` (optional, YYYY-MM-DD format, defaults to today)
+**Response**: Daily summary with totals, goals, and remaining macros
+**Database**: **READS** from `food_logs` and `macro_goals` tables
+**Example Response**:
+```json
+{
+  "date": "2025-07-25",
+  "total_calories": 400,
+  "total_protein": 35.0,
+  "total_carbs": 10.0,
+  "total_fat": 18.0,
+  "goal_calories": 2200,
+  "goal_protein": 192.5,
+  "goal_carbs": 220.0,
+  "goal_fat": 73.3,
+  "calories_remaining": 1800,
+  "protein_remaining": 157.5,
+  "carbs_remaining": 210.0,
+  "fat_remaining": 55.3,
+  "meals": [
+    {
+      "meal_type": "lunch",
+      "calories": 400,
+      "protein": 35.0,
+      "carbs": 10.0,
+      "fat": 18.0
+    }
+  ]
+}
+```
+
+### `GET /food-logs/summary/weekly`
+**Purpose**: Get weekly macro summary with averages
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Query Parameters**: `week_start` (optional, YYYY-MM-DD format, defaults to current week)
+**Response**: Weekly summary with daily averages and goal comparison
+**Database**: **READS** from `food_logs` and `macro_goals` tables
+**Example Response**:
+```json
+{
+  "week_start": "2025-07-21",
+  "week_end": "2025-07-27",
+  "daily_averages": {
+    "calories": 400,
+    "protein": 35.0,
+    "carbs": 10.0,
+    "fat": 18.0
+  },
+  "goal_averages": {
+    "calories": 2200,
+    "protein": 192.5,
+    "carbs": 220.0,
+    "fat": 73.3
+  },
+  "days_with_data": 1,
+  "total_days": 7
+}
+```
+
 ---
 
 ## ✏️ Create Endpoints (POST)
@@ -334,6 +396,8 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 | `/auth/me` | GET | **READ** auth.users | JWT Required | Get current user |
 | `/macro-goals/` | GET | **READ** macro_goals | JWT Required | Get macro goals |
 | `/food-logs/` | GET | **READ** food_logs | JWT Required | Get food logs |
+| `/food-logs/summary/daily` | GET | **READ** food_logs, macro_goals | JWT Required | Get daily summary |
+| `/food-logs/summary/weekly` | GET | **READ** food_logs, macro_goals | JWT Required | Get weekly summary |
 | `/auth/signup` | POST | **WRITE** auth.users | None | User registration |
 | `/auth/login` | POST | **READ** auth.users | None | User authentication |
 | `/profiles/` | POST | **WRITE** user_profiles | JWT Required | Create user profile |
@@ -355,10 +419,6 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 ---
 
 ## 🚧 Future Endpoints (Planned)
-
-### Summary Endpoints
-- `GET /food-logs/summary/daily` - Get daily macro summary
-- `GET /food-logs/summary/weekly` - Get weekly macro summary
 
 ### Agent Management
 - `POST /agent-consent` - Grant agent access
