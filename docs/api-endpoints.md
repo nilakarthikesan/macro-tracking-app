@@ -54,6 +54,48 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 }
 ```
 
+### `GET /macro-goals/`
+**Purpose**: Get current user's macro goals
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Response**: User's macro goals data
+**Database**: **READS** from `macro_goals` table
+**Example Response**:
+```json
+{
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "total_calories": 2000,
+  "protein_pct": 30.0,
+  "carb_pct": 40.0,
+  "fat_pct": 30.0,
+  "created_at": "2025-07-24T04:05:56.8207",
+  "updated_at": "2025-07-24T04:05:56.8207"
+}
+```
+
+### `GET /food-logs/`
+**Purpose**: Get all food logs for the current user
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Response**: Array of food log entries
+**Database**: **READS** from `food_logs` table
+**Example Response**:
+```json
+[
+  {
+    "id": "da31eb61-6ec3-400f-b36e-cb83807c71e",
+    "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+    "meal_type": "breakfast",
+    "food_name": "Oatmeal with berries",
+    "calories": 250,
+    "protein": 8.5,
+    "carbs": 45.2,
+    "fat": 4.1,
+    "logged_at": "2025-07-25T05:00:25.010699",
+    "created_at": "2025-07-25T05:00:25.010699",
+    "updated_at": "2025-07-25T05:00:25.010699"
+  }
+]
+```
+
 ---
 
 ## ✏️ Create Endpoints (POST)
@@ -132,6 +174,155 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 }
 ```
 
+### `POST /macro-goals/`
+**Purpose**: Create or update macro goals for the current user
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Request Body**: MacroGoalsCreate model
+**Response**: MacroGoalsResponse with created/updated data
+**Database**: **WRITES** to `macro_goals` table
+**Status Code**: 201 (Created)
+
+**Request Example**:
+```json
+{
+  "total_calories": 2000,
+  "protein_pct": 30.0,
+  "carb_pct": 40.0,
+  "fat_pct": 30.0
+}
+```
+
+**Response Example**:
+```json
+{
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "total_calories": 2000,
+  "protein_pct": 30.0,
+  "carb_pct": 40.0,
+  "fat_pct": 30.0,
+  "created_at": "2025-07-24T04:05:56.8207",
+  "updated_at": "2025-07-24T04:05:56.8207"
+}
+```
+
+### `POST /food-logs/`
+**Purpose**: Log a new food item for the current user
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Request Body**: FoodLogCreate model
+**Response**: FoodLogResponse with created data
+**Database**: **WRITES** to `food_logs` table
+**Status Code**: 201 (Created)
+
+**Request Example**:
+```json
+{
+  "meal_type": "breakfast",
+  "food_name": "Oatmeal with berries",
+  "calories": 250,
+  "protein": 8.5,
+  "carbs": 45.2,
+  "fat": 4.1
+}
+```
+
+**Response Example**:
+```json
+{
+  "id": "da31eb61-6ec3-400f-b36e-cb83807c71e",
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "meal_type": "breakfast",
+  "food_name": "Oatmeal with berries",
+  "calories": 250,
+  "protein": 8.5,
+  "carbs": 45.2,
+  "fat": 4.1,
+  "logged_at": "2025-07-25T05:00:25.010699",
+  "created_at": "2025-07-25T05:00:25.010699",
+  "updated_at": "2025-07-25T05:00:25.010699"
+}
+```
+
+---
+
+## ✏️ Update Endpoints (PUT)
+
+### `PUT /macro-goals/`
+**Purpose**: Update macro goals for the current user (partial update)
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Request Body**: MacroGoalsUpdate model (all fields optional)
+**Response**: MacroGoalsResponse with updated data
+**Database**: **UPDATES** `macro_goals` table
+**Status Code**: 200 (OK)
+
+**Request Example**:
+```json
+{
+  "total_calories": 2200,
+  "protein_pct": 35.0
+}
+```
+
+**Response Example**:
+```json
+{
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "total_calories": 2200,
+  "protein_pct": 35.0,
+  "carb_pct": 40.0,
+  "fat_pct": 30.0,
+  "created_at": "2025-07-24T04:05:56.8207",
+  "updated_at": "2025-07-25T01:29:54.123456"
+}
+```
+
+### `PUT /food-logs/{log_id}`
+**Purpose**: Update a specific food log entry
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Path Parameters**: `log_id` (UUID of the food log)
+**Request Body**: FoodLogUpdate model (all fields optional)
+**Response**: FoodLogResponse with updated data
+**Database**: **UPDATES** `food_logs` table
+**Status Code**: 200 (OK)
+
+**Request Example**:
+```json
+{
+  "calories": 300,
+  "protein": 10.0
+}
+```
+
+**Response Example**:
+```json
+{
+  "id": "da31eb61-6ec3-400f-b36e-cb83807c71e",
+  "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
+  "meal_type": "breakfast",
+  "food_name": "Oatmeal with berries",
+  "calories": 300,
+  "protein": 10.0,
+  "carbs": 45.2,
+  "fat": 4.1,
+  "logged_at": "2025-07-25T05:00:25.010699",
+  "created_at": "2025-07-25T05:00:25.010699",
+  "updated_at": "2025-07-25T05:15:30.123456"
+}
+```
+
+---
+
+## 🗑️ Delete Endpoints (DELETE)
+
+### `DELETE /food-logs/{log_id}`
+**Purpose**: Delete a specific food log entry
+**Headers**: `Authorization: Bearer <jwt_token>`
+**Path Parameters**: `log_id` (UUID of the food log)
+**Response**: No content
+**Database**: **DELETES** from `food_logs` table
+**Status Code**: 204 (No Content)
+
+**Example**: `DELETE /food-logs/da31eb61-6ec3-400f-b36e-cb83807c71e`
+
 ---
 
 ## 🔄 Database Interaction Summary
@@ -141,9 +332,16 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 | `/health` | GET | None | None | Server health check |
 | `/test-table` | GET | **READ** user_profiles | None | Test table access |
 | `/auth/me` | GET | **READ** auth.users | JWT Required | Get current user |
+| `/macro-goals/` | GET | **READ** macro_goals | JWT Required | Get macro goals |
+| `/food-logs/` | GET | **READ** food_logs | JWT Required | Get food logs |
 | `/auth/signup` | POST | **WRITE** auth.users | None | User registration |
 | `/auth/login` | POST | **READ** auth.users | None | User authentication |
 | `/profiles/` | POST | **WRITE** user_profiles | JWT Required | Create user profile |
+| `/macro-goals/` | POST | **WRITE** macro_goals | JWT Required | Create/update macro goals |
+| `/food-logs/` | POST | **WRITE** food_logs | JWT Required | Create food log |
+| `/macro-goals/` | PUT | **UPDATE** macro_goals | JWT Required | Update macro goals |
+| `/food-logs/{log_id}` | PUT | **UPDATE** food_logs | JWT Required | Update food log |
+| `/food-logs/{log_id}` | DELETE | **DELETE** food_logs | JWT Required | Delete food log |
 
 ---
 
@@ -158,15 +356,9 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ## 🚧 Future Endpoints (Planned)
 
-### Macro Management
-- `POST /macros` - Set user macro goals
-- `GET /macros` - Get user macro goals
-- `PUT /macros` - Update macro goals
-
-### Food Logging
-- `POST /food-log` - Log a meal
-- `GET /food-log` - Get food logs
-- `DELETE /food-log/{id}` - Delete a food log
+### Summary Endpoints
+- `GET /food-logs/summary/daily` - Get daily macro summary
+- `GET /food-logs/summary/weekly` - Get weekly macro summary
 
 ### Agent Management
 - `POST /agent-consent` - Grant agent access
