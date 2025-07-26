@@ -260,4 +260,70 @@ Completed full architecture doc (backend & frontend). Outlined tools, interactio
 - Database schema design best practices
 - FastAPI router organization and modularity
 - Real-time calculation vs. stored data trade-offs
-- Comprehensive testing strategies for API endpoints 
+- Comprehensive testing strategies for API endpoints
+
+---
+
+## Day 7 – July 26, 2025
+**Project:** MyFitnessPal Clone & AI Meal Planner Agent
+
+**Progress:**
+**Email Configuration & Domain Setup for Production Email Delivery**
+
+### Email System Investigation & Configuration:
+- **Identified email confirmation issues**: Users not receiving signup confirmation emails
+- **Diagnosed root cause**: Supabase built-in email service limited to 2 emails/hour
+- **Explored email configuration options**: Email templates vs SMTP settings
+- **Discovered rate limiting problems**: "email rate limit exceeded" errors during testing
+
+### Supabase Email Settings Analysis:
+- **Email Templates**: Confirmed correctly configured with `{{ .ConfirmationURL }}` placeholder
+- **SMTP Settings**: Found custom SMTP required for higher rate limits
+- **Rate Limits**: Built-in service limited to 2 emails/hour (insufficient for testing)
+- **Sender Verification**: Identified `nilakarthikesan@gmail.com` not verified in SendGrid
+
+### SendGrid Integration Challenges:
+- **Custom SMTP Configuration**: Attempted to use SendGrid for email delivery
+- **Sender Authentication Issues**: Domain authentication required for professional setup
+- **Rate Limit Configuration**: Custom SMTP needed to increase email sending limits
+- **Email Delivery Problems**: "Error sending confirmation email" due to unverified sender
+
+### Domain Setup for Professional Email:
+- **Registered domain**: `macro.com` through Cloudflare
+- **Set up Cloudflare account**: For DNS management and domain hosting
+- **Started nameserver configuration**: Final step to activate Cloudflare DNS
+- **Planned SendGrid domain authentication**: For professional email delivery
+
+### Technical Discoveries:
+- **Email Architecture**: Supabase Auth handles registration, email delivery can use built-in or custom SMTP
+- **Rate Limit Differences**: Built-in service (2/hour) vs SendGrid (100/day free, then paid)
+- **Domain Requirements**: Professional email setup requires domain ownership and DNS configuration
+- **Testing Conflicts**: Using same email for sending and testing can cause delivery issues
+
+### Current Status:
+- **Working**: User registration, email templates, domain purchase
+- **In Progress**: Cloudflare nameserver setup, SendGrid sender verification
+- **Next Steps**: Complete domain configuration, verify sender, test email delivery
+
+### Challenges Faced:
+1. **Email Rate Limiting**: Built-in service too restrictive for testing
+2. **SendGrid Configuration**: Sender verification and domain authentication complexity
+3. **Domain Setup**: Nameserver configuration and DNS management
+4. **Testing Methodology**: Need dedicated test email accounts
+
+### Key Learnings:
+- Production email delivery requires proper SMTP configuration
+- Domain authentication improves email deliverability significantly
+- Built-in services have limitations for production use
+- Email testing requires proper sender verification and rate limit management
+
+### Next Steps:
+- [ ] Complete Cloudflare nameserver configuration
+- [ ] Verify sender email in SendGrid
+- [ ] Re-enable custom SMTP in Supabase
+- [ ] Increase email rate limits
+- [ ] Test email delivery with new configuration
+- [ ] Create dedicated test email account
+- [ ] Implement Row Level Security (RLS) policies
+- [ ] Add agent permissions system
+- [ ] Begin frontend React development 
