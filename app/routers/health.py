@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from app.database import get_supabase
+from app.services.email_service import EmailService
 
 router = APIRouter(tags=["health & testing"])
 
@@ -30,4 +31,22 @@ async def test_user_profiles_table():
         return {
             "status": "error",
             "message": f"Failed to read from user_profiles table: {str(e)}"
+        }
+
+@router.post("/test-sendgrid")
+async def test_sendgrid_connection(test_email: str):
+    """Test SendGrid connection by sending a test email"""
+    try:
+        email_service = EmailService()
+        result = await email_service.test_connection(test_email)
+        
+        return {
+            "status": "success" if result["success"] else "error",
+            "message": result["message"],
+            "data": result
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Failed to test SendGrid connection: {str(e)}"
         } 

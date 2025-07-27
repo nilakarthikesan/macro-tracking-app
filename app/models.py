@@ -116,6 +116,35 @@ class WeeklySummaryResponse(BaseModel):
     days_with_data: int
     total_days: int
 
+# Email Models
+class EmailRequest(BaseModel):
+    to_email: EmailStr
+    subject: str
+    html_content: Optional[str] = None
+    text_content: Optional[str] = None
+
+class PasswordResetRequest(BaseModel):
+    email: str
+
+class PasswordResetResponse(BaseModel):
+    message: str
+    success: bool
+
+class WelcomeEmailRequest(BaseModel):
+    user_id: str
+    email: EmailStr
+    display_name: Optional[str] = None
+
+class DailySummaryEmailRequest(BaseModel):
+    user_id: str
+    email: EmailStr
+    date: str
+
+class EmailResponse(BaseModel):
+    message: str
+    success: bool
+    email_id: Optional[str] = None
+
 # Agent Consent Models (for later phases)
 class AgentConsent(BaseModel):
     has_consented: bool

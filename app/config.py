@@ -14,6 +14,11 @@ class Settings:
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
+    # SendGrid Configuration
+    SENDGRID_API_KEY: str = os.getenv("SENDGRID_API_KEY", "")
+    FROM_EMAIL: str = os.getenv("FROM_EMAIL", "noreply@macro.works")
+    FROM_NAME: str = os.getenv("FROM_NAME", "Macro Tracking App")
+
     # App Configuration
     APP_NAME: str = "Macro Tracking App"
     APP_VERSION: str = "1.0.0"
@@ -22,6 +27,11 @@ class Settings:
     def validate_supabase_config(cls) -> bool:
         """Validate that Supabase configuration is present"""
         return bool(cls.SUPABASE_URL and cls.SUPABASE_KEY)
+
+    @classmethod
+    def validate_sendgrid_config(cls) -> bool:
+        """Validate that SendGrid configuration is present"""
+        return bool(cls.SENDGRID_API_KEY)
 
 # Create settings instance
 settings = Settings()

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import health, auth, profiles, macro_goals, food_logs
+from app.routers import health, auth, profiles, macro_goals, food_logs, emails
 
 # Create FastAPI app
 app = FastAPI(
@@ -14,6 +14,7 @@ app.include_router(auth.router)
 app.include_router(profiles.router)
 app.include_router(macro_goals.router)
 app.include_router(food_logs.router)
+app.include_router(emails.router)
 
 if __name__ == "__main__":
     import uvicorn

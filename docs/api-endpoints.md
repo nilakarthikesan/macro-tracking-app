@@ -5,7 +5,7 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ---
 
-## 🔍 Read/Test Endpoints (GET)
+## Read/Test Endpoints (GET)
 
 ### `GET /health`
 **Purpose**: Check if the server is healthy and running
@@ -141,38 +141,65 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 {
   "week_start": "2025-07-21",
   "week_end": "2025-07-27",
+  "total_calories": 2800,
+  "total_protein": 245.0,
+  "total_carbs": 280.0,
+  "total_fat": 93.3,
   "daily_averages": {
-    "calories": 400,
+    "calories": 400.0,
     "protein": 35.0,
-    "carbs": 10.0,
-    "fat": 18.0
+    "carbs": 40.0,
+    "fat": 13.3
   },
-  "goal_averages": {
-    "calories": 2200,
-    "protein": 192.5,
-    "carbs": 220.0,
-    "fat": 73.3
-  },
-  "days_with_data": 1,
-  "total_days": 7
+  "goal_calories": 2200,
+  "goal_protein": 192.5,
+  "goal_carbs": 220.0,
+  "goal_fat": 73.3,
+  "daily_totals": {
+    "2025-07-25": {
+      "calories": 400,
+      "protein": 35.0,
+      "carbs": 40.0,
+      "fat": 13.3
+    }
+  }
+}
+```
+
+### `GET /emails/test-sendgrid`
+**Purpose**: Test SendGrid email connection
+**Response**: Email test results
+**External Service**: **SENDS** email via SendGrid
+**Example Response**:
+```json
+{
+  "success": true,
+  "message": "SendGrid connection test successful! Email sent to test@example.com",
+  "details": {
+    "success": true,
+    "message": "SendGrid connection test successful",
+    "status_code": 202,
+    "message_id": "pLJEu4bRTm0mzSf58vYGTQ"
+  }
 }
 ```
 
 ---
 
-## ✏️ Create Endpoints (POST)
+## Create Endpoints (POST)
 
 ### `POST /auth/signup`
-**Purpose**: Create a new user account using Supabase Auth
+**Purpose**: Create new user account with welcome email
 **Request Body**: UserSignupRequest model
-**Response**: TokenResponse with user info
+**Response**: TokenResponse with user data
 **Database**: **WRITES** to Supabase Auth (auth.users)
+**External Service**: **SENDS** welcome email via SendGrid
 **Status Code**: 201 (Created)
 
 **Request Example**:
 ```json
 {
-  "email": "newuser@example.com",
+  "email": "user@example.com",
   "password": "securepassword123"
 }
 ```
@@ -183,39 +210,66 @@ This document describes all the API endpoints in the Macro Tracking App, what th
   "access_token": "signup_successful",
   "token_type": "bearer",
   "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
-  "email": "newuser@example.com"
+  "email": "user@example.com"
 }
 ```
+
+**Email Sent**: Welcome email with getting started guide
 
 ### `POST /auth/login`
 **Purpose**: Authenticate user and return access token
 **Request Body**: UserLoginRequest model
 **Response**: TokenResponse with JWT token
 **Database**: **READS** from Supabase Auth (auth.users)
+**Status Code**: 200 (OK)
 
 **Request Example**:
 ```json
 {
-  "email": "test@macroapp.com",
-  "password": "test123"
+  "email": "user@example.com",
+  "password": "securepassword123"
 }
 ```
 
 **Response Example**:
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsImtpZCI6IjlVMEI2WGZwQitpTmtiU0IiLCJ0eXAiOiJKV1QifQ...",
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "token_type": "bearer",
   "user_id": "b7bcb761-e36b-4f65-ae62-da2451005f32",
-  "email": "test@macroapp.com"
+  "email": "user@example.com"
 }
 ```
 
+### `POST /auth/password-reset`
+**Purpose**: Request password reset email
+**Request Body**: PasswordResetRequest model
+**Response**: Success message
+**External Service**: **SENDS** password reset email via SendGrid
+**Status Code**: 200 (OK)
+
+**Request Example**:
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response Example**:
+```json
+{
+  "success": true,
+  "message": "Password reset email sent successfully"
+}
+```
+
+**Email Sent**: Password reset email with reset link
+
 ### `POST /profiles/`
-**Purpose**: Create a new user profile in the database
+**Purpose**: Create user profile for authenticated user
 **Headers**: `Authorization: Bearer <jwt_token>`
-**Request Body**: UserProfileCreate model
-**Response**: UserProfileResponse with created data
+**Request Body**: ProfileCreate model
+**Response**: ProfileResponse with created data
 **Database**: **WRITES** to `user_profiles` table
 **Status Code**: 201 (Created)
 
@@ -306,7 +360,7 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ---
 
-## ✏️ Update Endpoints (PUT)
+## Update Endpoints (PUT)
 
 ### `PUT /macro-goals/`
 **Purpose**: Update macro goals for the current user (partial update)
@@ -373,7 +427,7 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ---
 
-## 🗑️ Delete Endpoints (DELETE)
+## Delete Endpoints (DELETE)
 
 ### `DELETE /food-logs/{log_id}`
 **Purpose**: Delete a specific food log entry
@@ -387,39 +441,73 @@ This document describes all the API endpoints in the Macro Tracking App, what th
 
 ---
 
-## 🔄 Database Interaction Summary
+## Database Interaction Summary
 
-| Endpoint | Method | Database Action | Authentication | Purpose |
-|----------|--------|-----------------|----------------|---------|
-| `/health` | GET | None | None | Server health check |
-| `/test-table` | GET | **READ** user_profiles | None | Test table access |
-| `/auth/me` | GET | **READ** auth.users | JWT Required | Get current user |
-| `/macro-goals/` | GET | **READ** macro_goals | JWT Required | Get macro goals |
-| `/food-logs/` | GET | **READ** food_logs | JWT Required | Get food logs |
-| `/food-logs/summary/daily` | GET | **READ** food_logs, macro_goals | JWT Required | Get daily summary |
-| `/food-logs/summary/weekly` | GET | **READ** food_logs, macro_goals | JWT Required | Get weekly summary |
-| `/auth/signup` | POST | **WRITE** auth.users | None | User registration |
-| `/auth/login` | POST | **READ** auth.users | None | User authentication |
-| `/profiles/` | POST | **WRITE** user_profiles | JWT Required | Create user profile |
-| `/macro-goals/` | POST | **WRITE** macro_goals | JWT Required | Create/update macro goals |
-| `/food-logs/` | POST | **WRITE** food_logs | JWT Required | Create food log |
-| `/macro-goals/` | PUT | **UPDATE** macro_goals | JWT Required | Update macro goals |
-| `/food-logs/{log_id}` | PUT | **UPDATE** food_logs | JWT Required | Update food log |
-| `/food-logs/{log_id}` | DELETE | **DELETE** food_logs | JWT Required | Delete food log |
+| Endpoint | Method | Database Action | Authentication | External Service | Purpose |
+|----------|--------|-----------------|----------------|------------------|---------|
+| `/health` | GET | None | None | None | Server health check |
+| `/test-table` | GET | **READ** user_profiles | None | None | Test table access |
+| `/auth/me` | GET | **READ** auth.users | JWT Required | None | Get current user |
+| `/macro-goals/` | GET | **READ** macro_goals | JWT Required | None | Get macro goals |
+| `/food-logs/` | GET | **READ** food_logs | JWT Required | None | Get food logs |
+| `/food-logs/summary/daily` | GET | **READ** food_logs, macro_goals | JWT Required | None | Get daily summary |
+| `/food-logs/summary/weekly` | GET | **READ** food_logs, macro_goals | JWT Required | None | Get weekly summary |
+| `/emails/test-sendgrid` | GET | None | None | **SEND** email | Test SendGrid |
+| `/auth/signup` | POST | **WRITE** auth.users | None | **SEND** welcome email | User registration |
+| `/auth/login` | POST | **READ** auth.users | None | None | User authentication |
+| `/auth/password-reset` | POST | None | None | **SEND** reset email | Password reset |
+| `/profiles/` | POST | **WRITE** user_profiles | JWT Required | None | Create user profile |
+| `/macro-goals/` | POST | **WRITE** macro_goals | JWT Required | None | Create/update macro goals |
+| `/food-logs/` | POST | **WRITE** food_logs | JWT Required | None | Create food log |
+| `/macro-goals/` | PUT | **UPDATE** macro_goals | JWT Required | None | Update macro goals |
+| `/food-logs/{log_id}` | PUT | **UPDATE** food_logs | JWT Required | None | Update food log |
+| `/food-logs/{log_id}` | DELETE | **DELETE** food_logs | JWT Required | None | Delete food log |
 
 ---
 
-## 🔐 Authentication Flow
+## Authentication Flow
 
-1. **User Registration**: `POST /auth/signup` → Creates user in Supabase Auth
+1. **User Registration**: `POST /auth/signup` → Creates user in Supabase Auth + sends welcome email
 2. **User Login**: `POST /auth/login` → Returns JWT token
-3. **Protected Endpoints**: Include `Authorization: Bearer <jwt_token>` header
-4. **User Profile**: `POST /profiles/` → Creates profile linked to authenticated user
+3. **Password Reset**: `POST /auth/password-reset` → Sends reset email
+4. **Protected Endpoints**: Include `Authorization: Bearer <jwt_token>` header
+5. **User Profile**: `POST /profiles/` → Creates profile linked to authenticated user
 
 ---
 
-## 🚧 Future Endpoints (Planned)
+## Email Integration
+
+### SendGrid Configuration
+- **API Key**: Required in environment variables
+- **Sender Domain**: noreply@macro.works (authenticated)
+- **Templates**: HTML emails with app branding
+
+### Email Types
+1. **Welcome Emails**: Sent automatically on signup
+2. **Password Reset**: Sent on password reset request
+3. **Test Emails**: Available via `/emails/test-sendgrid`
+
+### Email Features
+- HTML formatting with professional design
+- Error handling (email failures don't break core functionality)
+- Message tracking via SendGrid message IDs
+- Configurable sender information
+
+---
+
+## Future Endpoints (Planned)
 
 ### Agent Management
 - `POST /agent-consent` - Grant agent access
-- `GET /agent-consent` - Check agent permissions 
+- `GET /agent-consent` - Check agent permissions
+- `DELETE /agent-consent` - Revoke agent access
+
+### Advanced Analytics
+- `GET /analytics/trends` - Long-term macro trends
+- `GET /analytics/comparison` - Compare periods
+- `GET /analytics/recommendations` - AI-powered suggestions
+
+### User Preferences
+- `POST /preferences` - Set user preferences
+- `GET /preferences` - Get user preferences
+- `PUT /preferences` - Update user preferences 
