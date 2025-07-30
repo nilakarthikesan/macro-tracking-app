@@ -1,6 +1,6 @@
 # Macro Tracking App 
 
-A FastAPI-based backend for a macro tracking application with Supabase integration, real user authentication, and SendGrid email functionality.
+A full-stack macro tracking application with FastAPI backend, React frontend, Supabase integration, real user authentication, and SendGrid email functionality.
 
 ## Current Status
 
@@ -10,9 +10,11 @@ A FastAPI-based backend for a macro tracking application with Supabase integrati
 **Phase 4 Complete**: Macro goals management with CRUD operations
 **Phase 5 Complete**: Food logging functionality with full CRUD operations
 **Phase 6 Complete**: SendGrid email integration with welcome and password reset emails
+**Phase 7 Complete**: React frontend with backend integration
 
 ## Features
 
+- **Full-Stack Application**: React frontend + FastAPI backend
 - **Real Authentication**: Supabase Auth integration with JWT tokens
 - **User Management**: Signup, login, and profile creation
 - **Email Integration**: SendGrid-powered welcome emails and password reset functionality
@@ -20,11 +22,14 @@ A FastAPI-based backend for a macro tracking application with Supabase integrati
 - **Food Logging**: Complete CRUD operations for logging meals and snacks
 - **Daily & Weekly Summaries**: Track progress with goal comparisons
 - **Database Integration**: PostgreSQL via Supabase
-- **Organized Code**: Modular FastAPI routers
+- **Organized Code**: Modular FastAPI routers and React components
 - **API Documentation**: Auto-generated with FastAPI
 - **Health Monitoring**: Server and database health checks
+- **Frontend-Backend Communication**: CORS-enabled API calls
 
 ## Setup
+
+### Backend Setup
 
 1. **Install dependencies:**
    ```bash
@@ -47,14 +52,33 @@ A FastAPI-based backend for a macro tracking application with Supabase integrati
    JWT_SECRET_KEY=your-secret-key-change-in-production
    ```
 
-3. **Run the server:**
+3. **Run the backend server:**
    ```bash
    python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
-4. **Visit the API:**
-   - Health: http://localhost:8000/health
+### Frontend Setup
+
+1. **Navigate to frontend directory:**
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Run the React development server:**
+   ```bash
+   npm start
+   ```
+
+4. **Visit the applications:**
+   - Backend API: http://localhost:8000
+   - Frontend App: http://localhost:3000
    - API Docs: http://localhost:8000/docs
+   - Health Check: http://localhost:8000/health
    - SendGrid Test: http://localhost:8000/emails/test-sendgrid
 
 ## API Endpoints
@@ -88,6 +112,31 @@ A FastAPI-based backend for a macro tracking application with Supabase integrati
 - `GET /health` - Server health check
 - `GET /test-table` - Database connection test
 
+## Frontend Features
+
+### React Application
+- **TypeScript**: Type-safe development
+- **Axios**: HTTP client for API communication
+- **React Router**: Navigation between pages
+- **Component Architecture**: Modular, reusable components
+- **API Integration**: Seamless backend communication
+
+### Current Components
+- **BackendTest**: Connection testing component
+- **API Service**: Centralized API communication
+- **Type Definitions**: TypeScript interfaces for API data
+
+### Project Structure
+```
+frontend/src/
+├── components/     # Reusable UI components
+├── pages/         # Full page components  
+├── services/      # API communication
+├── contexts/      # Global state management
+├── types/         # TypeScript definitions
+└── utils/         # Helper functions
+```
+
 ## Email Features
 
 ### Welcome Emails
@@ -110,27 +159,35 @@ A FastAPI-based backend for a macro tracking application with Supabase integrati
 
 ```
 macro-tracking-app/
-├── app/
+├── app/                    # FastAPI backend
 │   ├── __init__.py
-│   ├── main.py              # FastAPI application entry point
-│   ├── config.py            # Environment configuration
-│   ├── database.py          # Supabase client setup
-│   ├── models.py            # Pydantic models
-│   ├── routers/             # API route modules
-│   │   ├── health.py        # Health check endpoints
-│   │   ├── auth.py          # Authentication endpoints
-│   │   ├── profiles.py      # User profile endpoints
-│   │   ├── macro_goals.py   # Macro goals endpoints
-│   │   ├── food_logs.py     # Food logging endpoints
-│   │   └── emails.py        # Email testing endpoints
-│   └── services/            # Business logic services
+│   ├── main.py            # FastAPI application entry point
+│   ├── config.py          # Environment configuration
+│   ├── database.py        # Supabase client setup
+│   ├── models.py          # Pydantic models
+│   ├── routers/           # API route modules
+│   │   ├── health.py      # Health check endpoints
+│   │   ├── auth.py        # Authentication endpoints
+│   │   ├── profiles.py    # User profile endpoints
+│   │   ├── macro_goals.py # Macro goals endpoints
+│   │   ├── food_logs.py   # Food logging endpoints
+│   │   └── emails.py      # Email testing endpoints
+│   └── services/          # Business logic services
 │       ├── __init__.py
-│       ├── auth_service.py  # Authentication service
+│       ├── auth_service.py # Authentication service
 │       └── email_service.py # SendGrid email service
-├── docs/                    # Project documentation
-├── requirements.txt         # Python dependencies
-├── .env                     # Environment variables (not in git)
-└── README.md               # This file
+├── frontend/              # React frontend
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── services/      # API services
+│   │   ├── types/         # TypeScript types
+│   │   └── utils/         # Utility functions
+│   ├── package.json       # Frontend dependencies
+│   └── public/            # Static assets
+├── docs/                  # Project documentation
+├── requirements.txt       # Python dependencies
+├── .env                   # Environment variables (not in git)
+└── README.md             # This file
 ```
 
 ## Database Schema
@@ -148,13 +205,21 @@ macro-tracking-app/
 
 ## Next Steps
 
-- [ ] **Frontend Development**: React.js application with authentication
-- [ ] **Email Templates**: Customize email designs and branding
+- [ ] **Authentication UI**: Login/signup forms
+- [ ] **Dashboard**: User's macro overview and progress
+- [ ] **Food Logging Interface**: Add and track meals
+- [ ] **Macro Goals Management**: Set and edit targets
 - [ ] **Production Deployment**: Deploy to production environment
 - [ ] **Testing Suite**: Comprehensive API and integration tests
 - [ ] **Monitoring**: Add logging and performance monitoring
 
 ## Development Notes
+
+### Frontend-Backend Integration
+- CORS configured for localhost:3000
+- Axios interceptors for authentication tokens
+- TypeScript interfaces matching backend models
+- Error handling for network issues
 
 ### Email Configuration
 - SendGrid API key required for email functionality

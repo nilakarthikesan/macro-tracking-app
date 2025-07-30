@@ -1,7 +1,29 @@
 # API Endpoints Documentation
 
 ## Overview
-This document describes all the API endpoints in the Macro Tracking App, what they do, and how they interact with the database.
+This document describes all the API endpoints in the Macro Tracking App, what they do, and how they interact with the database. The application is now a full-stack solution with a React frontend communicating with a FastAPI backend.
+
+---
+
+## Frontend Integration
+
+### React Frontend Communication
+- **Base URL**: `http://localhost:3000` (React development server)
+- **API Base URL**: `http://localhost:8000` (FastAPI backend)
+- **CORS Configuration**: Enabled for frontend-backend communication
+- **Authentication**: JWT tokens passed via Authorization headers
+- **Error Handling**: Network errors and API failures handled gracefully
+
+### Frontend Components
+- **BackendTest**: Connection testing component
+- **API Service**: Centralized HTTP client with Axios
+- **Type Definitions**: TypeScript interfaces matching backend models
+- **Authentication**: Token management and protected route handling
+
+### Development Setup
+1. **Backend**: `python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+2. **Frontend**: `cd frontend && npm start` (runs on localhost:3000)
+3. **Testing**: Use the BackendTest component to verify connectivity
 
 ---
 
