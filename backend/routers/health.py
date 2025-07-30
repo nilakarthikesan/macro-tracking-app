@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from app.database import get_supabase
-from app.services.email_service import EmailService
+from backend.database import get_supabase
+from backend.services.email_service import EmailService
 
 router = APIRouter(tags=["health & testing"])
 

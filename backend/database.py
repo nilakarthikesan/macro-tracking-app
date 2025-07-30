@@ -1,5 +1,5 @@
 from supabase import create_client, Client
-from app.config import settings
+from backend.config import settings
 import logging
 
 # Configure logging

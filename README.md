@@ -54,7 +54,7 @@ A full-stack macro tracking application with FastAPI backend, React frontend, Su
 
 3. **Run the backend server:**
    ```bash
-   python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
 ### Frontend Setup
@@ -159,35 +159,35 @@ frontend/src/
 
 ```
 macro-tracking-app/
-├── app/                    # FastAPI backend
+├── backend/               # FastAPI backend
 │   ├── __init__.py
-│   ├── main.py            # FastAPI application entry point
-│   ├── config.py          # Environment configuration
-│   ├── database.py        # Supabase client setup
-│   ├── models.py          # Pydantic models
-│   ├── routers/           # API route modules
-│   │   ├── health.py      # Health check endpoints
-│   │   ├── auth.py        # Authentication endpoints
-│   │   ├── profiles.py    # User profile endpoints
+│   ├── main.py           # FastAPI application entry point
+│   ├── config.py         # Environment configuration
+│   ├── database.py       # Supabase client setup
+│   ├── models.py         # Pydantic models
+│   ├── routers/          # API route modules
+│   │   ├── health.py     # Health check endpoints
+│   │   ├── auth.py       # Authentication endpoints
+│   │   ├── profiles.py   # User profile endpoints
 │   │   ├── macro_goals.py # Macro goals endpoints
-│   │   ├── food_logs.py   # Food logging endpoints
-│   │   └── emails.py      # Email testing endpoints
-│   └── services/          # Business logic services
+│   │   ├── food_logs.py  # Food logging endpoints
+│   │   └── emails.py     # Email testing endpoints
+│   └── services/         # Business logic services
 │       ├── __init__.py
 │       ├── auth_service.py # Authentication service
 │       └── email_service.py # SendGrid email service
-├── frontend/              # React frontend
+├── frontend/             # React frontend
 │   ├── src/
-│   │   ├── components/    # React components
-│   │   ├── services/      # API services
-│   │   ├── types/         # TypeScript types
-│   │   └── utils/         # Utility functions
-│   ├── package.json       # Frontend dependencies
-│   └── public/            # Static assets
-├── docs/                  # Project documentation
-├── requirements.txt       # Python dependencies
-├── .env                   # Environment variables (not in git)
-└── README.md             # This file
+│   │   ├── components/   # React components
+│   │   ├── services/     # API services
+│   │   ├── types/        # TypeScript types
+│   │   └── utils/        # Utility functions
+│   ├── package.json      # Frontend dependencies
+│   └── public/           # Static assets
+├── docs/                 # Project documentation
+├── requirements.txt      # Python dependencies
+├── .env                  # Environment variables (not in git)
+└── README.md            # This file
 ```
 
 ## Database Schema

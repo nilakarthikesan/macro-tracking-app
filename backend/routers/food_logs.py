@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException, Depends
-from app.models import FoodLogCreate, FoodLogResponse, FoodLogUpdate, DailySummaryResponse, WeeklySummaryResponse
-from app.database import get_supabase
-from app.routers.auth import get_current_user
+from backend.models import FoodLogCreate, FoodLogResponse, FoodLogUpdate, DailySummaryResponse, WeeklySummaryResponse
+from backend.database import get_supabase
+from backend.routers.auth import get_current_user
 from uuid import uuid4
 from typing import List
 from datetime import datetime, timedelta

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException, Depends
-from app.models import MacroGoalsCreate, MacroGoalsResponse, MacroGoalsUpdate
-from app.database import get_supabase
-from app.routers.auth import get_current_user
+from backend.models import MacroGoalsCreate, MacroGoalsResponse, MacroGoalsUpdate
+from backend.database import get_supabase
+from backend.routers.auth import get_current_user
 
 router = APIRouter(prefix="/macro-goals", tags=["macro goals"])
 

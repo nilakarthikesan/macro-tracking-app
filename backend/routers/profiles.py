@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, status, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from app.models import UserProfileCreate, UserProfileResponse
-from app.database import get_supabase
-from app.services.auth_service import AuthService
+from backend.models import UserProfileCreate, UserProfileResponse
+from backend.database import get_supabase
+from backend.services.auth_service import AuthService
 
 router = APIRouter(prefix="/profiles", tags=["user profiles"])
 auth_service = AuthService()

@@ -2,7 +2,7 @@ import os
 from typing import Dict, Any
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content
-from app.config import settings
+from backend.config import settings
 
 class EmailService:
     def __init__(self):

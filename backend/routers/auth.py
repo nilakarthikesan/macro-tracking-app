@@ -1,9 +1,9 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from app.models import UserSignupRequest, UserLoginRequest, UserResponse, TokenResponse
-from app.services.auth_service import AuthService
-from app.services.email_service import EmailService
-from app.models import PasswordResetRequest
+from backend.models import UserSignupRequest, UserLoginRequest, UserResponse, TokenResponse
+from backend.services.auth_service import AuthService
+from backend.services.email_service import EmailService
+from backend.models import PasswordResetRequest
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 auth_service = AuthService()

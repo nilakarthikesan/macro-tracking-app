@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import health, auth, profiles, macro_goals, food_logs, emails
+from backend.routers import health, auth, profiles, macro_goals, food_logs, emails
 
 # Create FastAPI app
 app = FastAPI(

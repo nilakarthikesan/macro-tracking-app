@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.services.email_service import EmailService
-from app.config import settings
+from backend.services.email_service import EmailService
+from backend.config import settings
 
 router = APIRouter(prefix="/emails", tags=["emails"])
 

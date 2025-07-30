@@ -1,5 +1,5 @@
 from supabase import Client
-from app.database import get_supabase
+from backend.database import get_supabase
 import logging
 
 logger = logging.getLogger(__name__)
